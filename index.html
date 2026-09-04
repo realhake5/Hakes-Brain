@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A temporary, browser-local writing desk and private library for one person's stories, books, and notes.">
+  <meta name="theme-color" content="#10151d">
+  <title>Hake's Brain — Personal Library</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <section class="access-gate" id="access-gate" aria-labelledby="access-title">
+    <div class="access-card">
+      <p class="eyebrow"><span class="eyebrow-dot"></span> Temporary access</p>
+      <h1 id="access-title">Enter the library.</h1>
+      <p class="access-intro">Create a temporary account or sign in before viewing Hake's Brain. This access is stored only in this browser.</p>
+      <div class="auth-tabs" aria-label="Account actions">
+        <button class="tab-button is-active" type="button" data-local-auth-mode="sign-in">Sign in</button>
+        <button class="tab-button" type="button" data-local-auth-mode="sign-up">Create account</button>
+      </div>
+      <form id="access-form">
+        <label class="field-label" for="access-username">Username</label>
+        <input class="text-input" id="access-username" name="username" type="text" autocomplete="username" required maxlength="32">
+        <label class="field-label" for="access-password">Password</label>
+        <input class="text-input" id="access-password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+        <div id="access-description-wrap" hidden>
+          <label class="field-label" for="access-description">Short description</label>
+          <textarea class="text-input" id="access-description" name="description" rows="2" maxlength="160" placeholder="Who is using this temporary account?"></textarea>
+        </div>
+        <button class="button button-primary button-wide" type="submit" id="access-submit">Sign in</button>
+      </form>
+      <p class="form-message" id="access-message" role="status"></p>
+      <p class="privacy-note"><span>◎</span> Temporary access only. Do not use an important password or store sensitive information here.</p>
+    </div>
+  </section>
+  <div class="app-shell" id="app-shell">
+    <header class="site-header">
+      <a class="brand" href="#library" aria-label="Hake's Brain home">
+        <span class="brand-mark" aria-hidden="true">HB</span>
+        <span class="brand-copy"><strong>Hake's Brain</strong><small>notes from the inside</small></span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="nav-link is-active" href="#library">Library</a>
+        <a class="nav-link" href="#about">About</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" type="button" data-action="toggle-theme" aria-label="Switch color theme" title="Switch color theme">◐</button>
+        <button class="button button-quiet" type="button" data-action="open-auth" id="auth-button">Sign out</button>
+        <button class="button button-quiet" type="button" data-action="refresh-board" id="analytics-button" hidden>View board</button>
+        <button class="button button-primary" type="button" data-action="new-document" id="new-document-button" hidden>+ New document</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero-section" id="library" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> A personal publishing desk</p>
+          <h1 id="page-title">Ideas, stories,<br><em>kept close.</em></h1>
+          <p class="hero-lede">A quiet home for the things I am making, learning, remembering, and becoming.</p>
+          <div class="hero-meta"><span class="status-dot"></span><span id="hero-status">Loading your library…</span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+          <div class="art-card"><span>VOL. 01</span><strong>the<br>inside<br>pages</strong><small>EST. 2024</small></div>
+          <span class="art-star star-one">✦</span><span class="art-star star-two">✧</span><span class="art-star star-three">·</span>
+        </div>
+      </section>
+
+      <section class="library-section" aria-labelledby="library-heading">
+        <div class="section-heading">
+          <div><p class="eyebrow">The archive</p><h2 id="library-heading">Recent writing</h2></div>
+          <p class="section-note" id="result-count">Loading…</p>
+        </div>
+        <div class="library-toolbar" aria-label="Library controls">
+          <label class="search-field"><span class="sr-only">Search documents</span><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Search the archive…" autocomplete="off"></label>
+          <label class="select-field"><span class="sr-only">Sort documents</span><select id="sort-select"><option value="updated-desc">Recently updated</option><option value="title-asc">Title A–Z</option><option value="created-desc">Newest first</option></select></label>
+        </div>
+        <div class="filter-row" id="category-filters" aria-label="Filter by category"></div>
+        <div class="document-grid" id="document-grid" aria-live="polite"></div>
+        <div class="empty-state" id="empty-state" hidden><span class="empty-icon">✦</span><h3>No pages found</h3><p>Try a different search, or start a new piece of writing.</p><button class="button button-primary" type="button" data-action="new-document" hidden>Write something new</button></div>
+      </section>
+
+      <section class="analytics-section" id="analytics" aria-labelledby="analytics-heading" hidden>
+        <div class="section-heading">
+          <div><p class="eyebrow">Owner view board</p><h2 id="analytics-heading">Who has been reading</h2></div>
+          <div class="board-actions"><button class="button button-quiet" type="button" data-action="refresh-board">Refresh</button><button class="button button-danger" type="button" data-action="clear-board">Clear history</button></div>
+        </div>
+        <div class="analytics-summary" aria-label="Reading summary">
+          <div class="summary-card"><span>Total views</span><strong id="total-views">0</strong></div>
+          <div class="summary-card"><span>Unique viewers</span><strong id="unique-viewers">0</strong></div>
+          <div class="summary-card"><span>Documents viewed</span><strong id="documents-viewed">0</strong></div>
+        </div>
+        <div class="analytics-table-wrap">
+          <table class="analytics-table"><caption class="sr-only">Document reading history</caption><thead><tr><th scope="col">Viewer</th><th scope="col">Description</th><th scope="col">Document</th><th scope="col">Viewed</th></tr></thead><tbody id="analytics-body"></tbody></table>
+        </div>
+        <div class="analytics-empty" id="analytics-empty" hidden><span class="empty-icon">◌</span><h3>No reading history yet</h3><p>When an account opens a document, the visit will appear here.</p></div>
+      </section>
+
+      <section class="about-section" id="about" aria-labelledby="about-heading">
+        <div class="about-number">01</div><div><p class="eyebrow">A note from the desk</p><h2 id="about-heading">This is a place for unfinished thoughts.</h2></div>
+        <p class="about-copy">Not everything needs to become a product. Some things just need somewhere to be kept. This library is my small, intentional corner of the internet — part notebook, part bookshelf, part record of the road.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer"><span>© <span id="footer-year"></span> Hake's Brain</span><span>Made slowly, with intention.</span></footer>
+  </div>
+
+
+  <dialog class="modal modal-wide" id="editor-dialog" aria-labelledby="editor-title"><div class="modal-inner editor-modal"><button class="modal-close" type="button" data-action="close-editor" aria-label="Close editor">×</button><div class="editor-header"><div><p class="eyebrow">Private writing desk</p><h2 id="editor-title">New document</h2></div><span class="save-state" id="save-state">Draft</span></div><form id="document-form"><div class="editor-meta-grid"><div><label class="field-label" for="document-title">Title <span>*</span></label><input class="text-input text-input-large" id="document-title" name="title" type="text" maxlength="120" required placeholder="Give this piece a name"></div><div><label class="field-label" for="document-category">Category</label><select class="text-input" id="document-category" name="category"><option>Essays</option><option>Books</option><option>Notes</option><option>Projects</option><option>Personal</option></select></div></div><label class="field-label" for="document-description">Short description</label><textarea class="text-input" id="document-description" name="description" rows="2" maxlength="240" placeholder="A sentence to help future you find it"></textarea><div class="editor-meta-grid"><div><label class="field-label" for="document-tags">Tags <span class="field-hint">separate with commas</span></label><input class="text-input" id="document-tags" name="tags" type="text" maxlength="180" placeholder="life, ideas, work"></div><label class="toggle-field"><input id="document-published" name="published" type="checkbox"><span class="toggle-track" aria-hidden="true"></span><span><strong>Publish this page</strong><small>Visible to anyone with the link</small></span></label></div><div class="editor-toolbar" aria-label="Formatting tools"><button type="button" data-editor-command="bold"><strong>B</strong><span class="sr-only">Bold</span></button><button type="button" data-editor-command="italic"><em>I</em><span class="sr-only">Italic</span></button><button type="button" data-editor-command="formatBlock" data-editor-value="h2">H<span class="sr-only">Heading</span></button><button type="button" data-editor-command="insertUnorderedList">• <span class="sr-only">Bulleted list</span></button><button type="button" data-editor-command="formatBlock" data-editor-value="blockquote">“<span class="sr-only">Quote</span></button><button type="button" data-action="insert-link">↗<span class="sr-only">Insert link</span></button><span class="toolbar-divider"></span><button type="button" data-action="trigger-image">▧ <span>Image</span></button></div><div class="editor-body" id="editor-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Document body" data-placeholder="Start writing here…"></div><div class="editor-footer"><p class="form-message" id="editor-message" role="status"></p><div class="editor-actions"><button class="button button-quiet" type="button" data-action="close-editor">Cancel</button><button class="button button-primary" type="submit">Save document</button></div></div></form><input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" hidden></div></dialog>
+
+  <dialog class="modal modal-reader" id="reader-dialog" aria-labelledby="reader-title"><div class="modal-inner reader-modal"><button class="modal-close" type="button" data-action="close-dialog" data-dialog="reader-dialog" aria-label="Close reader">×</button><div id="reader-content"></div></div></dialog>
+  <dialog class="modal" id="confirm-dialog" aria-labelledby="confirm-title"><div class="modal-inner confirm-modal"><p class="eyebrow">Are you sure?</p><h2 id="confirm-title">Delete this document?</h2><p>This cannot be undone. The document and its images will be removed from your library.</p><div class="confirm-actions"><button class="button button-quiet" type="button" data-action="close-dialog" data-dialog="confirm-dialog">Keep it</button><button class="button button-danger" type="button" data-action="confirm-delete">Delete permanently</button></div></div></dialog>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <div class="setup-banner" id="setup-banner" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/config.js" defer></script>
+  <script src="js/sanitize.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/data.js" defer></script>
+  <script src="js/editor.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
